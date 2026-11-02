@@ -91,17 +91,15 @@ class ToolBox:
 
     def _bash(self, command: str) -> dict:
         parts = shlex.split(command)
-        if parts == ["pwd"]:
-            return {"stdout": str(self.root), "exit_code": 0}
-        if parts == ["date"]:
-            from datetime import datetime
-            return {"stdout": datetime.now().isoformat(), "exit_code": 0}
-        if parts and parts[0] == "ls" and len(parts) <= 2:
+        if parts in (["pwd"], ["date"]):
+            argv = parts
+        elif parts and parts[0] == "ls" and len(parts) <= 2:
             path = self._safe_path(parts[1] if len(parts) == 2 else ".")
-            return {"stdout": "\n".join(p.name for p in sorted(path.iterdir())[:100]), "exit_code": 0}
-        if len(parts) == 2 and parts[0] == "rg" and not parts[1].startswith("-"):
-            result = subprocess.run(["rg", "--max-count", "5", "--", parts[1], "."],
-                                    cwd=self.root, capture_output=True, text=True, timeout=3)
-            return {"stdout": result.stdout[:4000], "stderr": result.stderr[:300],
-                    "exit_code": result.returncode}
-        raise ValueError("command not allowlisted")
+            argv = ["ls", str(path)]
+        elif len(parts) == 2 and parts[0] == "rg" and not parts[1].startswith("-"):
+            argv = ["rg", "--max-count", "5", "--", parts[1], "."]
+        else:
+            raise ValueError("command not allowlisted")
+        result = subprocess.run(argv, cwd=self.root, capture_output=True, text=True, timeout=3)
+        return {"stdout": result.stdout[:4000], "stderr": result.stderr[:300],
+                "exit_code": result.returncode}
