@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Daily · 每日新闻助手</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">✦</span><span>AI Daily</span></div>
+    <span class="badge" id="model-status">正在检查模型配置</span>
+  </header>
+  <main>
+    <section class="hero">
+      <div class="eyebrow">YOUR PERSONAL AI NEWSROOM</div>
+      <h1>把 AI 新闻，<br><em>变成与你有关的每日简报。</em></h1>
+      <p>按兴趣订阅真实来源。Agent 自主检索、筛选和整理，每天按设定时间投递。</p>
+    </section>
+    <div class="layout">
+      <section class="panel settings">
+        <div class="section-heading"><div><span class="overline">01 / PREFERENCES</span><h2>订阅设置</h2></div></div>
+        <form id="settings-form">
+          <label>你的称呼<input id="name" required maxlength="60" placeholder="例如：小林"></label>
+          <label>邮箱 <small>用于识别订阅，配置 SMTP 后也用于邮件投递</small>
+            <input id="email" type="email" required placeholder="you@example.com"></label>
+          <label>关注话题 <small>用逗号分隔</small>
+            <input id="topics" placeholder="例如：AI Agent, 大模型, 开源模型"></label>
+          <label>关键词 <small>可填英文词，便于匹配英文新闻源</small>
+            <input id="keywords" placeholder="例如：RAG, inference, multimodal"></label>
+          <label>每日投递时间 <small>北京时间；服务运行时自动检查</small>
+            <select id="delivery-hour"></select></label>
+          <button class="primary" type="submit">保存订阅 <span>↗</span></button>
+        </form>
+        <button class="secondary" id="run-now" disabled>立即生成一份简报 <span>→</span></button>
+        <p class="hint">默认投递到下方站内收件箱。配置 SMTP 后会同时发送邮件。</p>
+      </section>
+      <section class="panel inbox">
+        <div class="section-heading"><div><span class="overline">02 / YOUR INBOX</span><h2>历史简报</h2></div><button id="refresh" class="text-button">刷新 ↻</button></div>
+        <div id="message" role="status"></div>
+        <div id="runs" class="runs"><div class="empty">保存订阅后，这里会展示你的简报。</div></div>
+      </section>
+    </div>
+    <footer>新闻标题与来源来自公开 RSS。摘要由模型生成，请点击原文核实细节。</footer>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
+
